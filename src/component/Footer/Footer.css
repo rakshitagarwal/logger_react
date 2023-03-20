@@ -1,0 +1,17 @@
+footer{
+    background-color: #f2f2f2;
+    padding: 20px 0;
+    text-align: center;
+    font-size: 14px;
+}
+.container{
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+@media only screen and (max-width:767px) {
+    .container{
+        max-width: 100%;
+        padding: 0 10px;
+    }
+}

@@ -1,0 +1,122 @@
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #343a40;
+  padding: 10px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 99;
+}
+
+.logo img {
+  height: 25px;
+}
+
+.login-logout {
+  display: flex;
+  align-items: center;
+}
+
+.login-logout a {
+  display: flex;
+  text-decoration: none;
+  color: #333;
+  margin-left: 10px;
+}
+
+.login-logout .icon {
+  font-size: 25px;
+  color: #333;
+  margin-right: 10px;
+}
+
+span:hover {
+  text-decoration: none;
+}
+.logo {
+  text-decoration: none;
+}
+.logo:hover {
+  text-decoration: none;
+}
+.logo-text {
+  color: white;
+  font-size: 15px;
+}
+
+/* button {
+  background-color: #dc3545;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #c82333;
+} */
+
+@media screen and (max-width: 768px) {
+  header {
+    flex-wrap: wrap;
+  }
+  .logo {
+    margin-bottom: 10px;
+  }
+  .login-logout {
+    margin-top: 10px;
+  }
+}
+
+.profile {
+  transition: all 0.5s ease;
+  width: 40px;
+  height: 40px;
+  padding: 4px;
+  border-radius: 50%;
+  color: gray !important;
+  background-color: #fff;
+  position: relative;
+  margin-right: 10px;
+}
+.profile-btn {
+  position: absolute;
+  top: 54px;
+  right: 29px;
+  height: 75px;
+  width: 9%;
+  background-color: #d0d0d0;
+  z-index: 9999;
+  transition: all 0.5s ease;
+  border-radius: 5px;
+}
+.logoutbtn {
+  color: gray !important;
+  background-color: #fff;
+  height: 29px;
+  margin: 4px;
+  border-radius: 4px;
+  padding: 0px 22px;
+  border: 1px solid white;
+  transition: all 0.5s ease;
+}
+.btn-loggedout {
+  border: 1px solid #a0a0a0 !important;
+  border-radius: 3px !important;
+  margin: 5px;
+  color: black !important;
+}
+.btn-loggedout:hover {
+  background-color: white !important;
+}
+.modal {
+  position: absolute !important;
+  top: 50% !important;
+  height: 291px !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 400px !important;
+  padding: 20px !important;
+}
