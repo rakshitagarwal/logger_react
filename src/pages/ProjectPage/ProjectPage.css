@@ -1,7 +1,7 @@
 .projectpage {
   position: relative;
   align-items: center;
-  height: 100vmin;
+  height:100vmin;
 }
 
 table {
@@ -64,6 +64,8 @@ td button {
 }
 .view-error-btn {
   cursor: pointer !important;
+  color: black !important;
+  text-decoration: none;
 }
 
 td button:hover {
@@ -196,12 +198,13 @@ input:focus {
   padding: 20px !important;
   background-color: transparent !important;
 }
+
 .btn-actions{
   border-radius: 5px;
   background-color: transparent !important;
   font-size: 16px;
   cursor: pointer;
-  padding: 0px 15px;
+  padding: 0px 11px;
 
 }
 .w-25{

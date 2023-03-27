@@ -6,7 +6,7 @@
   position: relative;
   align-items: center;
 
-  height: 100vmin;
+  height: 87vmin;
 }
 .f-20 {
   font-size: 20px !important;
@@ -72,6 +72,7 @@ td button {
 }
 .view-error-btn {
   cursor: pointer !important;
+  color: black !important;
 }
 
 td button:hover {
@@ -160,6 +161,17 @@ thead > tr {
   border: 1px solid #008080;
   margin-left: 5px;
 }
+.btns-back {
+  transition: all 0.5s ease;
+  width: 13%;
+  margin-right: 10px;
+  height: 30px !important;
+  /* border-radius: 3px; */
+  color: gray !important;
+  background-color: #fff;
+  border: none;
+  margin-left: 5px;
+}
 .btns-page {
   transition: all 0.5s ease;
   width: 40px;
@@ -181,10 +193,11 @@ input:focus {
 .heading-title {
   position: absolute;
   top: 7px;
-  left: 58px;
+  left: 45px;
   font-size: 18px;
   font-weight: 700;
-}
+  min-width: 19%;
+  max-width: 60%;}
 .limit {
   display: flex;
   width: max-content;
@@ -214,7 +227,7 @@ input:focus {
 }
 
 .stack-title {
-  height: 155px;
+  height: 200px;
   overflow: scroll;
   background-color: black;
   color: white;
@@ -259,7 +272,7 @@ input:focus {
   border-radius: 6px;
 }
 .text-infos {
-  background-color: rgb(0 0 0 / 61%);
+  background-color: blue;
   color: white;
   padding: 5px 15px;
   font-weight: 700;
@@ -290,4 +303,7 @@ input:focus {
 }
 .fw-bold {
   font-weight: 900 !important;
+}
+.f-14{
+  font-size: 14px !important;
 }

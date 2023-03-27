@@ -1,11 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import SimpleDateTime from "react-simple-timestamp-to-date";
 import { FaInfoCircle } from "react-icons/fa";
 import { IoIosWarning } from "react-icons/io";
 import { RxCrossCircled } from "react-icons/rx";
-import { BsEyeFill, BsCalendarWeekFill } from "react-icons/bs";
+import { AiOutlineArrowLeft } from "react-icons/ai";
+import { BsEyeFill, BsCalendarWeekFill, } from "react-icons/bs";
+import { BiTimeFive } from "react-icons/bi";
+import { IoMdCodeWorking} from "react-icons/io";
 
 import {
   findAllErrorLog,
@@ -19,7 +22,7 @@ import jsPDF from "jspdf";
 import "./errorLog.css";
 import "react-dates/lib/css/_datepicker.css";
 import Modal from "react-bootstrap/Modal";
-const ErrorLog = () => {
+const ErrorLog = ({}) => {
   const dispatch = useDispatch();
   const { loading, error, errorLogs, errorCount, activePage, resultPerPage } =
     useSelector((state) => state.findAllErrorLogs);
@@ -29,6 +32,7 @@ const ErrorLog = () => {
   const [show, setShow] = useState(false);
   const [errLog, setErrLog] = useState({});
   const handleClose = () => setShow(false);
+  const navigate = useNavigate();
   const handleShow = (errorLog) => {
     setShow(true);
     setErrLog(errorLog);
@@ -63,15 +67,17 @@ const ErrorLog = () => {
   const location = useLocation();
   const dateFormat = (time) => {
     const times = new Date(time);
-    console.log()
+    console.log();
     const newTime = `${times.getHours()}:${times.getMinutes()}:${times.getSeconds()}`;
-    const newDate = `${times.getDate()}/${times.getMonth()+1}/${times.getFullYear()}`;
+    const newDate = `${times.getDate()}/${
+      times.getMonth() + 1
+    }/${times.getFullYear()}`;
     return { newDate, newTime };
   };
   useEffect(() => {
     dispatch(
       findAllErrorLog({
-        projectId: location?.state,
+        projectId: location?.state?.id,
         skip: currentPage,
         limit: dataPerPage,
         search: searchKeyword,
@@ -80,11 +86,17 @@ const ErrorLog = () => {
   }, [dataPerPage, searchKeyword, currentPage]);
   return (
     <div className="errorPage">
-      <div className="heading-title">Error Logs</div>
+      <div className="heading-title">
+        {" "}
+        <button className="btns-back" onClick={() => navigate(-1)}>
+          <AiOutlineArrowLeft />
+        </button>
+       <span> Error Logs /</span><span>{errorLogs?.projectName}</span>
+      </div>
       <div className="search-contain px-5 pt-0">
         <input
           type="text"
-          placeholder="Search your error logs "
+          placeholder="Search your error logs"
           value={searchKeyword}
           onChange={handleSearch}
           className="search_name"
@@ -123,14 +135,14 @@ const ErrorLog = () => {
                       <td>{errorLog?.service}</td>
                       <td>
                         {errorLog?.level === "info" ? (
-                        <span className="text-infos">Info</span>
+                          <span className="text-infos">Info</span>
                         ) : (
                           <>
                             {errorLog?.level === "warn" ? (
                               <span className="text-warnings">Warn</span>
-                              ) : (
+                            ) : (
                               <span className="text-dangers">Error</span>
-                              )}
+                            )}
                           </>
                         )}
                       </td>
@@ -161,11 +173,11 @@ const ErrorLog = () => {
                       : errLog?.level === "info" && "border-top-info"
                   }`}
                 >
-                  <Modal.Title>Detail error</Modal.Title>
+                  <Modal.Title>Log info</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                   <div className="mb-2 center-align">
-                    <span className="text-danger f-20">{errLog?.message} </span>
+                    <span className={`${errLog?.level==="error"?"text-danger":errLog?.level==="info"?"text-primary": errLog?.level === "warn"&& "text-warning"} f-20`}>{errLog?.message} </span>
                     <span
                       className={`fw-bold ${
                         errLog?.level === "warn"
@@ -174,22 +186,31 @@ const ErrorLog = () => {
                       }`}
                     >
                       {errLog?.level === "info" ? (
-                        <FaInfoCircle />
+                        <FaInfoCircle className="f-14"/>
                       ) : (
                         <>
                           {errLog?.level === "warn" ? (
-                            <IoIosWarning />
+                            <IoIosWarning className="f-14"/>
                           ) : (
-                            <RxCrossCircled />
+                            <RxCrossCircled className="f-14"/>
                           )}
                         </>
                       )}
                     </span>
                   </div>
+                  <div className="mb-2 center-align">
+                   <IoMdCodeWorking className="f-14"/>{errLog?.service}
+                  </div>
 
+                  <div className="mb-2 center-align">
+                    <span className="fw-bold ">
+                      <BsCalendarWeekFill className="f-14"/>
+                    </span>
+                    <span> {dateFormat(errLog?.createdAt).newDate}</span>
+                  </div>
                   <div className="mb-3 center-align">
-                  <span className="fw-bold "><BsCalendarWeekFill /></span>
-                   <span> {dateFormat(errLog?.createdAt).newDate}</span>
+                  <span><BiTimeFive/></span>
+                  <span> {dateFormat(errLog?.createdAt).newTime}</span>
                   </div>
                   {errLog.level === "error" && (
                     <div className="stack-title">{errLog?.stack}</div>
@@ -215,7 +236,7 @@ const ErrorLog = () => {
             <option value="15">15</option>
             <option value="20">20</option>
           </select>
-          <span className="ml-1">Total error-logs :{errorCount}</span>
+          <span className="ml-1">Total logs :{errorCount}</span>
         </div>
         <Pagination
           activePage={activePage}

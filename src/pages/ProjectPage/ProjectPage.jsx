@@ -14,7 +14,7 @@ import { DELETE_PROJECT_RESET } from "../../redux/constants/userConstants";
 import { useNavigate } from "react-router-dom";
 import Pagination from "react-js-pagination";
 import Loader from "../../component/Loader/Loader";
-import { FaTrash, FaEdit, FaEye, FaCopy } from "react-icons/fa";
+import { FaTrash, FaEdit, FaEye, FaCopy, FaEyeSlash } from "react-icons/fa";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 import { TiTick } from "react-icons/ti";
 import { ImCross } from "react-icons/im";
@@ -38,14 +38,11 @@ const ProjectPage = () => {
   const classes = useStyle();
   const [open, setOpen] = useState(false);
   const [openSecondModal, setOpenSecondModal] = useState(false);
-  const [showProjectId, setShowProjectId] = useState(false);
   const [showKey, setShowKey] = useState(false);
   const [copiedSecretKey, setCopiedSecretKey] = useState(false);
   const [copiedProjectId, setCopiedProjectId] = useState(false);
   const [openDeleteDialogBox, setOpenDeleteDialogBox] = useState(false);
-  const [deleteProjectName, setDeleteProjectName] = useState();
-  const [id, setId] = useState("");
-
+  const [deleteData, setDeleteData] = useState({});
   const setCurrentPageNumber = (e) => {
     setCurrentPage(e - 1);
   };
@@ -53,19 +50,17 @@ const ProjectPage = () => {
   const { loading, error, projects, projectsCount, activePage, resultPerPage } =
     useSelector((state) => state.findAllProjects);
 
-  console.log(projectsCount, "++++++++++++++++++");
   const { error: deleteError, isDeleted } = useSelector(
     (state) => state.deleteProject
   );
 
-  const deleteProjectHandler = async (id, projectName) => {
+  const deleteProjectHandler = async (val) => {
     setOpenDeleteDialogBox(true);
-    setDeleteProjectName(projectName);
-    setId(id);
+    setDeleteData(val);
   };
 
   const viewErrorLogs = (id) => {
-    navigate("/errorLog", { state: id });
+    navigate("errorLog", { state: id });
   };
   const handleResultPerPage = (e) => {
     const value = e.target.value;
@@ -86,8 +81,6 @@ const ProjectPage = () => {
     error: Error,
     projectId,
   } = useSelector((state) => state.getProjectSecretKey);
-  console.log(projectId);
-  console.log();
 
   // modal
 
@@ -124,13 +117,12 @@ const ProjectPage = () => {
 
   const handleCloseSecondModal = () => {
     setOpenSecondModal(false);
-    setId("");
   };
 
   const handleDelete = async () => {
-    await dispatch(deleteProject(id));
+    await dispatch(deleteProject(deleteData?.id));
     setOpenDeleteDialogBox(false);
-    setId("");
+    setDeleteData({ id: "", projectName: "" });
     await dispatch(
       findAllproject({
         skip: currentPage,
@@ -182,12 +174,14 @@ const ProjectPage = () => {
           onChange={handleSearch}
           className="search_name mr-5"
         />
-        <button
-          className="btns"
-          onClick={() => navigate("/projectPage/createproject")}
+        <Link
+          className="btns border-0"
+          to={{
+            pathname: "createproject",
+          }}
         >
-          Add Project
-        </button>
+          <button className="btns w-100">Add Project</button>
+        </Link>
       </div>
       {loading ? (
         <Loader />
@@ -214,37 +208,39 @@ const ProjectPage = () => {
                       <td className="px-2">
                         {resultPerPage * (activePage - 1) + index + 1}
                       </td>
-                      <td
-                        onClick={() => {
-                          viewErrorLogs(project.id);
+                      <td className="px-2 view-error-btn w-25">
+                      <Link
+                        to={{
+                          pathname: "errorLog",
                         }}
-                        className="px-2 view-error-btn w-25"
+                        state={{ id: project.id }}
+                        className='view-error-btn'
                       >
-                        {project.projectName}
-                      </td>
+                          {project.projectName}
+                      </Link>
+                        </td>
                       <td className="px-2">{project.description}</td>
                       <td className="text-right">
                         <button
                           onClick={() =>
-                            deleteProjectHandler(
-                              project.id,
-                              project.projectName
-                            )
+                            deleteProjectHandler({
+                              id: project.id,
+                              projectName: project?.projectName,
+                            })
                           }
                           className="bg-white text-danger btn-actions"
                         >
                           <FaTrash />
                         </button>
-
-                        <button
-                          className="bg-white text-secondary btn-actions"
-                          onClick={() =>
-                            navigate("/projectPage/updateProject", {
-                              state: project.id,
-                            })
-                          }
-                        >
-                          <FaEdit />
+                        <button className="bg-white text-secondary btn-actions">
+                          <Link
+                            to={{
+                              pathname: "updateProject",
+                            }}
+                            state={{ updateId: project.id }}
+                          >
+                            <FaEdit />
+                          </Link>
                         </button>
 
                         <button
@@ -333,9 +329,9 @@ const ProjectPage = () => {
                   open={openDeleteDialogBox}
                   onClose={() => setOpenDeleteDialogBox(false)}
                 >
-                  <DialogTitle>Delete {deleteProjectName}</DialogTitle>
+                  <DialogTitle>Delete Project</DialogTitle>
                   <DialogContent>
-                    Are you sure you want to {deleteProjectName} ?
+                    Are you sure you want to delete {deleteData?.projectName}?
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={() => setOpenDeleteDialogBox(false)}>
@@ -366,7 +362,7 @@ const ProjectPage = () => {
             <option value="15">15</option>
             <option value="20">20</option>
           </select>
-          <span className="ml-1">Total projects: {projectsCount}</span>
+          <span className="ml-1">Total projects {projectsCount}</span>
         </div>
         <Pagination
           activePage={activePage}

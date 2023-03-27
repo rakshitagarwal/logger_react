@@ -82,7 +82,6 @@ export const getProject = (projectId) => async (dispatch) => {
       `${API_BASE_URL}/projects/${projectId}`,
       config
     );
-    console.log(data);
     dispatch({ type: GET_PROJECT_SUCCESS, payload: data?.data });
   } catch (error) {
     dispatch({
